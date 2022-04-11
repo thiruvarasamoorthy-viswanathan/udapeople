@@ -19,7 +19,7 @@ jobs:
           paths: [frontend/node_modules]
           key: frontend-build-1
       - slack/notify:
-          channel: udacity-devops
+          channel: udacity
           event: fail
           template: basic_fail_1          
   build-backend:
@@ -39,7 +39,7 @@ jobs:
           paths: [backend/node_modules]
           key: backend-build-1
       - slack/notify:
-          channel: udacity-devops
+          channel: udacity
           event: fail
           template: basic_fail_1           
   test-frontend:
@@ -56,7 +56,7 @@ jobs:
             npm install
             npm run test
       - slack/notify:
-          channel: udacity-devops
+          channel: udacity
           event: fail
           template: basic_fail_1             
   test-backend:
@@ -73,7 +73,7 @@ jobs:
             npm install
             npm run test
       - slack/notify:
-          channel: udacity-devops
+          channel: udacity
           event: fail
           template: basic_fail_1             
   scan-frontend:
@@ -90,7 +90,7 @@ jobs:
             npm install
             npm audit fix --audit-level=critical --force
       - slack/notify:
-          channel: udacity-devops
+          channel: udacity
           event: fail
           template: basic_fail_1             
   scan-backend:
@@ -107,7 +107,7 @@ jobs:
             npm install
             npm audit fix --audit-level=critical --force  
       - slack/notify:
-          channel: udacity-devops
+          channel: udacity
           event: fail
           template: basic_fail_1             
 workflows:
