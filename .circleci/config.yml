@@ -123,6 +123,7 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - checkout
+      - run: yum install -y tar gzip      
       - run:
           name: backend infrastructure
           command: |
@@ -132,7 +133,7 @@ jobs:
             --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  \
             --tags project=udapeople
       - run:
-          name:  front-end infracture
+          name:  front-end infrastructure
           command: |
             aws cloudformation deploy \
             --template-file .circleci/files/frontend.yml \
@@ -154,22 +155,22 @@ jobs:
 workflows:
   default:
     jobs:
-      - build-frontend:
-          context: slack-secrets
-      - build-backend:
-          context: slack-secrets      
-      - test-frontend:
-          requires: [build-frontend]
-          context: slack-secrets          
-      - test-backend:
-          requires: [build-backend]
-          context: slack-secrets         
-      - scan-frontend:
-          requires: [build-frontend]
-          context: slack-secrets          
-      - scan-backend:
-          requires: [build-backend]       
-          context: slack-secrets
+#      - build-frontend:
+#          context: slack-secrets
+#      - build-backend:
+#          context: slack-secrets      
+#      - test-frontend:
+#          requires: [build-frontend]
+#          context: slack-secrets          
+#      - test-backend:
+#          requires: [build-backend]
+#          context: slack-secrets         
+#      - scan-frontend:
+#          requires: [build-frontend]
+#          context: slack-secrets          
+#      - scan-backend:
+#          requires: [build-backend]       
+#          context: slack-secrets
       - deploy-infrastructure:
-          requires: [test-frontend, test-backend, scan-frontend, scan-backend]
+#          requires: [test-frontend, test-backend, scan-frontend, scan-backend]
           context: slack-secrets          
