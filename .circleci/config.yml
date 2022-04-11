@@ -1,6 +1,10 @@
 version: 2.1
 orbs: 
   slack: circleci/slack@4.9.3
+parameters:
+  SLACK_ACCESS_TOKEN:
+    type: string
+    default: "2c7ade43-a6e2-4ec3-95ed-e0279da44182"  
 jobs:
   build-frontend:
     docker:
