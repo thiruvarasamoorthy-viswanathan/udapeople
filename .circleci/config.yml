@@ -1,10 +1,6 @@
 version: 2.1
 orbs: 
   slack: circleci/slack@4.9.3
-parameters:
-  SLACK_ACCESS_TOKEN:
-    type: string
-    default: "2c7ade43-a6e2-4ec3-95ed-e0279da44182"  
 jobs:
   build-frontend:
     docker:
@@ -23,6 +19,7 @@ jobs:
           paths: [frontend/node_modules]
           key: frontend-build-1
       - slack/notify:
+          channel: udacity-devops
           event: fail
           template: basic_fail_1          
   build-backend:
@@ -42,8 +39,9 @@ jobs:
           paths: [backend/node_modules]
           key: backend-build-1
       - slack/notify:
+          channel: udacity-devops
           event: fail
-          template: basic_fail_1            
+          template: basic_fail_1           
   test-frontend:
     docker:
       - image: circleci/node:13.8.0
@@ -58,8 +56,9 @@ jobs:
             npm install
             npm run test
       - slack/notify:
+          channel: udacity-devops
           event: fail
-          template: basic_fail_1              
+          template: basic_fail_1             
   test-backend:
     docker:
       - image: circleci/node:13.8.0
@@ -74,8 +73,9 @@ jobs:
             npm install
             npm run test
       - slack/notify:
+          channel: udacity-devops
           event: fail
-          template: basic_fail_1              
+          template: basic_fail_1             
   scan-frontend:
     docker:
       - image: circleci/node:13.8.0
@@ -90,8 +90,9 @@ jobs:
             npm install
             npm audit fix --audit-level=critical --force
       - slack/notify:
+          channel: udacity-devops
           event: fail
-          template: basic_fail_1              
+          template: basic_fail_1             
   scan-backend:
     docker:
       - image: circleci/node:13.8.0
@@ -106,8 +107,9 @@ jobs:
             npm install
             npm audit fix --audit-level=critical --force  
       - slack/notify:
+          channel: udacity-devops
           event: fail
-          template: basic_fail_1              
+          template: basic_fail_1             
 workflows:
   default:
     jobs:
