@@ -114,12 +114,18 @@ workflows:
   default:
     jobs:
       - build-frontend
+          context: CirecleCI_Udapeople
       - build-backend
+          context: CirecleCI_Udapeople      
       - test-frontend:
           requires: [build-frontend]
+          context: CirecleCI_Udapeople          
       - test-backend:
           requires: [build-backend]
+          context: CirecleCI_Udapeople          
       - scan-frontend:
           requires: [build-frontend]
+          context: CirecleCI_Udapeople          
       - scan-backend:
-          requires: [build-backend]          
+          requires: [build-backend]       
+          context: CirecleCI_Udapeople          
