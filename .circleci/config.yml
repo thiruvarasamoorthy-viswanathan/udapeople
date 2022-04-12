@@ -191,13 +191,12 @@ jobs:
             cd backend
             npm install
             npm run migrations > migrations_dump.txt
+            migration_succesful=$(cat migrations_dump.txt | grep -c "has been executed successfully")
+            if [ $migration_succesful > 0 ]; then exit 0; else exit 1; fi;            
       - run:
-        name: Send migration status to kvdb.io OR memstash.io
+        name: Send migration status to kvdb.io
         command: |   
-          if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
-          then
-            curl https://kvdb.io/QqtFuA5mpfvRANjGW41E1P/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
-          fi            
+          curl https://kvdb.io/QqtFuA5mpfvRANjGW41E1P/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
       - slack/notify:
           channel: udacity
           event: fail
