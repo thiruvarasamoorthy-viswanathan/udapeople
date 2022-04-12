@@ -345,5 +345,5 @@ jobs:
 workflows:
   default:
     jobs:
-      - cloudfront-update:
+      - cloudfront-update
 
