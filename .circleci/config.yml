@@ -351,7 +351,7 @@ workflows:
 #      - scan-frontend:
 #          requires: [build-frontend]
 #          context: slack-secrets          
-#      - scan-backend:
+      - scan-backend:
 #          requires: [build-backend]       
 #          context: slack-secrets
 #      - deploy-infrastructure:
@@ -369,5 +369,5 @@ workflows:
 #      - deploy-backend:
 #          requires: [run-migrations]
 #          context: slack-secrets
-      - smoke-test
+#      - smoke-test
 #          requires: [deploy-backend, deploy-frontend]                                                               
