@@ -333,6 +333,7 @@ jobs:
       - run:
           name: Update cloudfront distribution
           command: |
+            cd ~/project
             aws cloudformation deploy \
               --stack-name udapeople-cloudfront \
               --template-file .circleci/files/cloudfront.yml \
@@ -344,6 +345,5 @@ jobs:
 workflows:
   default:
     jobs:
-      - smoke-test
       - cloudfront-update:
           requires: [smoke-test]
