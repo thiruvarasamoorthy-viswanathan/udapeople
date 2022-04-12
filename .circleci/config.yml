@@ -151,7 +151,34 @@ jobs:
           root: ~/
           paths:
             - project/.circleci/ansible/inventory.txt
-      - destroy_environment                
+      - destroy_environment
+      - slack/notify:
+          channel: udacity
+          event: fail
+          template: basic_fail_1        
+  configure-infrastructure: 
+    docker:
+      - image: python:3.7-alpine3.11
+    steps:
+      - checkout
+      - add_ssh_keys:
+          fingerprints: ['6b:00:a1:a9:dd:06:13:5f:68:25:e5:da:b4:e5:b5:43']
+      - attach_workspace:
+          at: ~/   
+      - run:
+          name: Install dependencies
+          command: |
+            apk add --update ansible # install the dependencies needed for your playbook
+          #  cat .circleci/ansible/inventory.txt
+      - run:
+          name: Configure server
+          command: |
+            cd .circleci/ansible
+            ansible-playbook -i inventory.txt configure-server.yml
+      - slack/notify:
+          channel: udacity
+          event: fail
+          template: basic_fail_1                                                               
 workflows:
   default:
     jobs:
@@ -173,4 +200,7 @@ workflows:
 #          context: slack-secrets
       - deploy-infrastructure:
 #          requires: [test-frontend, test-backend, scan-frontend, scan-backend]
-          context: slack-secrets          
+          context: slack-secrets    
+      - configure-infrastructure:
+          requires: [deploy-infrastructure]  
+          context: slack-secrets                         
