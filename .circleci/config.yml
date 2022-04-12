@@ -353,7 +353,7 @@ workflows:
 #          context: slack-secrets          
       - scan-backend:
 #          requires: [build-backend]       
-#          context: slack-secrets
+          context: slack-secrets
 #      - deploy-infrastructure:
 #          requires: [test-frontend, test-backend, scan-frontend, scan-backend]
 #          context: slack-secrets    
