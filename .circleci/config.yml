@@ -284,7 +284,7 @@ jobs:
       - run:
           name: smoke test for backend.
           command: |
-            BACKEND_IP=`aws --region us-west-2 ec2 describe-instances \
+            BACKEND_IP=`aws --region us-east-1 ec2 describe-instances \
               --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
               --output text`
@@ -292,7 +292,7 @@ jobs:
       - run:
           name: smoke test for frontend
           command: |
-            FRONTEND_URL="https://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-us-west-2.amazonaws.com/index.html"
+            FRONTEND_URL="https://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-us-east-1.amazonaws.com/index.html"
             if curl -s ${FRONTEND_URL} | grep "Welcome"
               then
                 return 0
@@ -321,16 +321,6 @@ jobs:
 workflows:
   default:
     jobs:
-      - deploy-infrastructure
-      - configure-infrastructure:
-          requires: [deploy-infrastructure]
-      - run-migration:
-          requires: [configure-infrastructure]
-      - deploy-frontend:
-          requires: [run-migration]
-      - deploy-backend:
-          requires: [run-migration]
       - smoke-test:
-          requires: [deploy-backend, deploy-frontend]
       - cloudfront-update:
           requires: [smoke-test]
