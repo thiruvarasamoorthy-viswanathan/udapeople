@@ -339,11 +339,11 @@ jobs:
               --template-file .circleci/files/cloudfront.yml \
               --region ${AWS_DEFAULT_REGION} \
               --parameter-overrides WorkflowID=a442326
-      - destroy-environment
+
 
  
 workflows:
   default:
     jobs:
       - cloudfront-update:
-          requires: [smoke-test]
+
