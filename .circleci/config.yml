@@ -344,6 +344,6 @@ jobs:
 workflows:
   default:
     jobs:
-      - smoke-test:
+      - smoke-test
       - cloudfront-update:
           requires: [smoke-test]
