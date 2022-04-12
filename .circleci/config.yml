@@ -1,6 +1,7 @@
 version: 2.1
 orbs: 
   slack: circleci/slack@4.9.3
+  aws-cli: circleci/aws-cli@3.0.0
 commands:
    destroy_environment:
      steps:
@@ -211,6 +212,8 @@ jobs:
       - image: circleci/node:13.8.0
     steps:
       - checkout
+      - aws-cli/setup:
+          profile-name: default      
       - attach_workspace:
           at: ~/
       - run:
@@ -251,6 +254,8 @@ jobs:
       - image: circleci/node:13.8.0
     steps:
       - checkout
+      - aws-cli/setup:
+          profile-name: default        
       - add_ssh_keys:
           fingerprints: ['6b:00:a1:a9:dd:06:13:5f:68:25:e5:da:b4:e5:b5:43']      
       - attach_workspace:
