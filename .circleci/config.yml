@@ -217,11 +217,6 @@ jobs:
       - attach_workspace:
           at: ~/
       - run:
-          name: Install tar/gzip utility
-          command: |
-            yum install -y tar gzip
-            yum install -y unzip            
-      - run:
           name: Install dependencies
           command: |
             apt-get update && sudo apt-get install -yy less
