@@ -223,7 +223,6 @@ jobs:
             echo "API_URL = ${API_URL}"
             echo API_URL="http://${BACKEND_IP}:3030" >> frontend/.env
             cat frontend/.env    
-      - aws-cli/setup                    
       - run:
           name: Build frontend
           command: |
