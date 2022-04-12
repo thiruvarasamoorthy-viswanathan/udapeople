@@ -320,7 +320,7 @@ jobs:
 workflows:
   default:
     jobs:
-      - smoke-test:
+      - smoke-test
 #          requires: [deploy-backend, deploy-frontend]
       - cloudfront-update:
           requires: [smoke-test]
