@@ -321,7 +321,7 @@ jobs:
             if curl -s ${URL} | grep "Welcome"
             then
                 # Change this to 0 after the job fails
-              return 0
+              return 1
             else
               return 1
             fi    
@@ -335,7 +335,7 @@ jobs:
           command: |
             aws cloudformation deploy \
               --stack-name udapeople-cloudfront \
-              --template-file .circleci/files/cloudfront.yml \
+              --template-file files/cloudfront.yml \
               --region ${AWS_DEFAULT_REGION} \
               --parameter-overrides WorkflowID=a442326
 
@@ -344,5 +344,6 @@ jobs:
 workflows:
   default:
     jobs:
+ 
       - cloudfront-update
 
