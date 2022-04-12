@@ -221,7 +221,8 @@ jobs:
           command: |
             cd frontend
             sudo npm install webpack-dev-server -g
-            sudo npm install
+            npm install
+            npm audit fix --audit-level=critical --force  
       - run:
           name: Get backend url
           command: |
@@ -265,7 +266,8 @@ jobs:
           command: |
             cd frontend
             sudo npm install webpack-dev-server -g
-            sudo npm install
+            npm install
+            npm audit fix --audit-level=critical --force  
             apk add --update ansible openssh-client tar gzip   
       - restore_cache:
           keys: ["backend-dist"]                     
