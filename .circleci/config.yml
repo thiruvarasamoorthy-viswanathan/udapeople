@@ -337,10 +337,7 @@ jobs:
               --stack-name udapeople-cloudfront \
               --template-file .circleci/files/cloudfront.yml \
               --region ${AWS_DEFAULT_REGION} \
-              --parameter-overrides WorkflowID=a442326
-
-
- 
+              --parameter-overrides WorkflowID=devopsproject
 workflows:
   default:
     jobs:
