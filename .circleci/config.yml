@@ -285,7 +285,7 @@ jobs:
           name: smoke test for backend.
           command: |
             BACKEND_IP=$(aws ec2 describe-instances \
-            --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
+#            --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
             --query 'Reservations[0].Instances[0].PublicIpAddress' \
             --output text)
             curl "http://${BACKEND_IP}:3030/api/status"
@@ -321,16 +321,7 @@ jobs:
 workflows:
   default:
     jobs:
-      - deploy-infrastructure
-      - configure-infrastructure:
-          requires: [deploy-infrastructure]
-      - run-migration:
-          requires: [configure-infrastructure]
-      - deploy-frontend:
-          requires: [run-migration]
-      - deploy-backend:
-          requires: [run-migration]
       - smoke-test:
-          requires: [deploy-backend, deploy-frontend]
+#          requires: [deploy-backend, deploy-frontend]
       - cloudfront-update:
           requires: [smoke-test]
