@@ -335,7 +335,7 @@ jobs:
           command: |
             aws cloudformation deploy \
               --stack-name udapeople-cloudfront \
-              --template-file files/cloudfront.yml \
+              --template-file .circleci/files/cloudfront.yml \
               --region ${AWS_DEFAULT_REGION} \
               --parameter-overrides WorkflowID=a442326
 
@@ -344,6 +344,6 @@ jobs:
 workflows:
   default:
     jobs:
- 
+
       - cloudfront-update
 
