@@ -230,7 +230,7 @@ jobs:
             ./aws/install --bin-dir /usr/local/bin --install-dir /usr/local/aws-cli --update
       - run:
           name: Get backend url
-          workding_directory: ./frontend
+          working_directory: ./frontend
           command: |
             export BACKEND_IP=$(aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" --output text)
             export API_URL="http://${BACKEND_IP}:3030"
@@ -249,7 +249,7 @@ jobs:
             npm run build
             tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
             aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
-      - destroy-environment
+      - destroy_environment
       - slack/notify:
           channel: udacity
           event: fail
@@ -268,11 +268,10 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            cd frontend
-            sudo npm install webpack-dev-server -g
-            npm install
-            npm audit fix --audit-level=critical --force  
-            apk add --update ansible openssh-client tar gzip   
+            apk add --update ansible curl rsync openssh nodejs npm
+            ansible --version
+            pip install awscli
+            aws --version  
       - restore_cache:
           keys: ["backend-dist"]                     
       - run:
