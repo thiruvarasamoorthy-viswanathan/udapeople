@@ -335,7 +335,7 @@ jobs:
           command: |
             aws cloudformation update-stack \
               --use-previous-template --stack-name InitialStack \
-              --parameters ParameterKey=WorkflowID,ParameterValue=a442326,UsePreviousValue=false
+              --parameters ParameterKey=WorkflowID,ParameterValue=a4423261,UsePreviousValue=false
 workflows:
   default:
     jobs:
