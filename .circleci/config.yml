@@ -23,18 +23,15 @@ commands:
     steps:
       - run:
           name: Revert migrations
-          # Add when this will run
           when: on_fail
           command: |
-            # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
-            SUCCESS=$(curl -H "token: ${MEMSTASH_TOKEN}" --request GET https://api.memstash.io/values/migration-${CIRCLE_WORKFLOW_ID:0:7})
-            echo ${SUCCESS}
-            if(( $SUCCESS==1 )); 
+            SUCCESS=$(curl --insecure  https://kvdb.io/GxHhCz2fFMCPcvmo4u3Avn/_${CIRCLE_WORKFLOW_ID:0:7})
+            if (( $SUCCESS == 1 ));
             then
-              cd ~/project/backend
-              npm install
-              npm run migrations:revert
-            fi              
+                cd ~/project/backend
+                npm install
+                npm run migration:revert
+            fi             
 jobs:
   build-frontend:
     docker:
@@ -204,11 +201,7 @@ jobs:
             cd ~/project/backend
             if grep -q "has been executed successfully" migration_output
             then
-              echo "Success"
-              
-            else
-              echo "Failure"
-              
+              curl https://kvdb.io/GxHhCz2fFMCPcvmo4u3Avn/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
             fi
       - destroy-environment
   deploy-frontend:
@@ -241,6 +234,7 @@ jobs:
             cd dist
             aws s3 sync . "s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7}" --delete
       - destroy-environment
+      - revert-migrations      
   deploy-backend:
     docker:
       - image: python:3.7-alpine3.11
@@ -262,6 +256,7 @@ jobs:
             export ANSIBLE_HOST_KEY_CHECKING=False
             ansible-playbook -i inventory.txt deploy-backend.yml
       - destroy-environment
+      - revert-migrations      
   smoke-test:
     docker:
       - image: python:3.7-alpine3.11
