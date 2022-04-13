@@ -333,11 +333,10 @@ jobs:
       - run:
           name: Update cloudfront distribution
           command: |
-            aws cloudformation update \
+            aws cloudformation update-stack \
+              --use-previous-template --stack-name InitialStack \
               --stack-name udapeople-cloudfront \
-              --template-file .circleci/files/cloudfront.yml \
-              --region ${AWS_DEFAULT_REGION} \
-              --parameter-overrides WorkflowID=a442326
+              --parameters ParameterKey=WorkflowID,ParameterValue=a442326,UsePreviousValue=false
 workflows:
   default:
     jobs:
