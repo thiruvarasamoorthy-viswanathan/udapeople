@@ -334,8 +334,8 @@ jobs:
           name: Update cloudfront distribution
           command: |
             aws cloudformation update-stack \
-              --use-previous-template --stack-name InitialStack \
-              --stack-name udapeople-cloudfront \
+              --use-previous-template \ 
+              --stack-name InitialStack \
               --parameters ParameterKey=WorkflowID,ParameterValue=a442326,UsePreviousValue=false
 workflows:
   default:
