@@ -338,71 +338,25 @@ jobs:
         - run:
             name: Clean old stacks
             command: |
-              CurrentWorkflowID=${CIRCLE_WORKFLOW_ID:0:7}
-              if [[ "$CurrentWorkflowID" != "$OldWorkflowID" ]]
+              export OldWorkflowID=$(aws cloudformation list-exports --query "Exports[?Name==\`OldWorkflowID\`].Value" --no-paginate --output text)
+              OldWorkflowID=${OldWorkflowID#udapeople-}
+              echo OldWorkflowID: "${OldWorkflowID}"
+              echo CIRCLE_WORKFLOW_ID: "${CIRCLE_WORKFLOW_ID:0:7}"
+              echo Stack names: "${STACKS[@]}"
+              
+              if [[ "${STACKS[@]}" =~ "${OldWorkflowID}" ]]
               then
-                echo "$OldWorkflowID!=$CurrentWorkflowID -  will delete old version"
+                echo "Removing old Stacks#....${OldWorkflowID}"
+                echo "s3://udapeople-${OldWorkflowID}"
                 aws s3 rm "s3://udapeople-${OldWorkflowID}" --recursive
-                aws cloudformation delete-stack --stack-name "udapeople-frontend-${OldWorkflowID}"
                 aws cloudformation delete-stack --stack-name "udapeople-backend-${OldWorkflowID}"
+                aws cloudformation delete-stack --stack-name "udapeople-frontend-${OldWorkflowID}"                        
               else
-                echo "$OldWorkflowID==$CurrentWorkflowID - There is no old stacks needs to be cleaned up"
+                echo "There is no old stacks needs to be cleaned up"
               fi
                                
 workflows:
   default:
     jobs:
-      - build-frontend:
-          context: slack-secrets      
-      - build-backend :
-          context: slack-secrets          
-      - test-frontend:
-          requires: [build-frontend]
-          context: slack-secrets          
-      - test-backend:
-          requires: [build-backend]
-          context: slack-secrets          
-      - scan-frontend:
-          requires: [build-frontend]
-      - scan-backend:
-          requires: [build-backend]
-      - deploy-infrastructure:
-          requires: [test-frontend, test-backend, scan-frontend, scan-backend]
-          filters:
-            branches:
-              only: [master]          
-      - configure-infrastructure:
-          requires: [deploy-infrastructure]
-          filters:
-            branches:
-              only: [master]          
-      - run-migration:
-          requires: [configure-infrastructure]
-          filters:
-            branches:
-              only: [master]          
-      - deploy-frontend:
-          requires: [run-migration]
-          filters:
-            branches:
-              only: [master]          
-      - deploy-backend:
-          requires: [run-migration]
-          filters:
-            branches:
-              only: [master]          
-      - smoke-test:
-          requires: [deploy-backend, deploy-frontend]
-          filters:
-            branches:
-              only: [master]          
-      - cloudfront-update:
-          requires: [smoke-test]
-          filters:
-            branches:
-              only: [master]              
-      - cleanup:
-          filters:
-            branches:
-              only: [master]      
+      - cleanup   
 
