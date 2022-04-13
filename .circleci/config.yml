@@ -353,12 +353,16 @@ workflows:
   default:
     jobs:
       - build-frontend
+          context: slack-secrets      
       - build-backend :
           requires: [build-frontend]
+          context: slack-secrets          
       - test-frontend:
           requires: [build-frontend]
+          context: slack-secrets          
       - test-backend:
           requires: [build-backend]
+          context: slack-secrets          
       - scan-frontend:
           requires: [build-frontend]
       - scan-backend:
