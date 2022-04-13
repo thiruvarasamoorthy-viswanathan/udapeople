@@ -17,26 +17,6 @@ commands:
               --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"
             aws cloudformation delete-stack \
               --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"
-  revert-migrations:
-    description: Revert the last migration if successfully run in the current workflow.
-    parameters:
-      # Add parameter here     
-    steps:
-      - run:
-          name: Revert migrations
-          # Add when this will run
-          when: on_fail
-          command: |
-            # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
-            SUCCESS=$(curl -H "token: ${MEMSTASH_TOKEN}" --request GET https://api.memstash.io/values/migration-${CIRCLE_WORKFLOW_ID:0:7})
-            echo ${SUCCESS}
-            if(( $SUCCESS==1 )); 
-            then
-            cd ~/project/backend
-            npm install
-            npm run migrations:revert
-            fi
-            
 jobs:
   build-frontend:
     docker:
@@ -242,7 +222,6 @@ jobs:
             npm run build
             cd dist
             aws s3 sync . "s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7}" --delete
-      - revert-migrations
       - destroy-environment
   deploy-backend:
     docker:
@@ -265,7 +244,6 @@ jobs:
             export ANSIBLE_HOST_KEY_CHECKING=False
             ansible-playbook -i inventory.txt deploy-backend.yml
       - destroy-environment
-      - revert-migrations
   smoke-test:
     docker:
       - image: python:3.7-alpine3.11
@@ -298,13 +276,13 @@ jobs:
           name: Get backend url
           command: |
             # your code here
-            export BACKEND_IP=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=backend-a442326" --query 'Reservations[0].Instances[0].PublicIpAddress' --output text)
+            export BACKEND_IP=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" --query 'Reservations[0].Instances[0].PublicIpAddress' --output text)
             echo $BACKEND_IP
       - run:
           name: Backend smoke test.
           command: |
             # your code here
-            export BACKEND_IP=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=backend-a442326" --query 'Reservations[0].Instances[0].PublicIpAddress' --output text)
+            export BACKEND_IP=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" --query 'Reservations[0].Instances[0].PublicIpAddress' --output text)
             echo $BACKEND_IP
             export API_URL="http://${BACKEND_IP}:3030"
             echo "${API_URL}"
@@ -318,7 +296,7 @@ jobs:
           name: Frontend smoke test.
           command: |
             # your code here
-            URL="https://udapeople-a442326.s3.us-east-1.amazonaws.com/index.html#/employees"             
+            URL="https://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3.us-east-1.amazonaws.com/index.html#/employees"             
             echo ${URL} 
             if curl -s ${URL} | grep "Welcome"
             then
@@ -337,8 +315,8 @@ jobs:
           command: |
             aws cloudformation update-stack \
               --use-previous-template --stack-name InitialStack \
-              --parameters ParameterKey=WorkflowID,ParameterValue=a4423261,UsePreviousValue=false
-      - destroy_environment              
+              --parameters ParameterKey=WorkflowID,ParameterValue=${CIRCLE_WORKFLOW_ID:0:7},UsePreviousValue=false
+      - destroy-environment              
 workflows:
   default:
     jobs:
