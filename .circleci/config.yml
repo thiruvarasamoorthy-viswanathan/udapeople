@@ -398,7 +398,7 @@ workflows:
           filters:
             branches:
               only: [master]              
-      - cleanup
+      - cleanup:
           filters:
             branches:
               only: [master]      
