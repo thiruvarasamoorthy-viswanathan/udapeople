@@ -339,6 +339,6 @@ jobs:
 workflows:
   default:
     jobs:
-
+      - smoke-test
       - cloudfront-update
 
