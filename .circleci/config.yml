@@ -409,4 +409,5 @@ workflows:
           filters:
             branches:
               only: [circleci-project-setup]              
-      - cleanup
+      - cleanup:
+          requires: [cloudfront-update]
