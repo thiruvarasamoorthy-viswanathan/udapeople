@@ -4,4 +4,6 @@
 
 2. Public URL for your S3 Bucket (aka, your green candidate front-end) [URL02]
 
-[URL02]  -->    
+[URL02]
+Cloudfront --> https://dq9sxjsoki02.cloudfront.net/
+S3 --> http://udapeople-185d6d0.s3-website-us-east-1.amazonaws.com
